@@ -25,6 +25,13 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+        const foodCollection = client.db('FusionDineDB').collection('foods');
+
+        app.get('/foods', async (req, res) => {
+            const query = { 'add_by.name': 'Owner' };
+            const result = await foodCollection.find(query).toArray()
+            res.send(result)
+        })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
