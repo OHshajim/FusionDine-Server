@@ -27,6 +27,10 @@ async function run() {
         await client.connect();
         const foodCollection = client.db('FusionDineDB').collection('foods');
 
+        app.get('/allFoods', async (req, res) => {
+            const result = await foodCollection.find().toArray()
+            res.send(result)
+        })
         app.get('/foods', async (req, res) => {
             const query = { 'add_by.name': 'Owner' };
             const result = await foodCollection.find(query).toArray()
