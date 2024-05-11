@@ -26,6 +26,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const foodCollection = client.db('FusionDineDB').collection('foods');
+        const purchaseFoodCollection = client.db('FusionDineDB').collection('purchaseFoods');
 
         app.get('/allFoods', async (req, res) => {
             const result = await foodCollection.find().toArray()
@@ -42,11 +43,17 @@ async function run() {
             const result = await foodCollection.findOne(query)
             res.send(result)
         })
-        
+
         app.get('/singleFood/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodCollection.findOne(query)
+            res.send(result)
+        })
+        app.post('/purchaseFood', async (req, res) => {
+            const food = req.body;
+            console.log(food);
+            const result = await purchaseFoodCollection.insertOne(food)
             res.send(result)
         })
         // Send a ping to confirm a successful connection
