@@ -44,6 +44,20 @@ async function run() {
             const result = await foodCollection.findOne(query)
             res.send(result)
         })
+        app.get('/myFoods/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { 'add_by.email': email };
+            const result = await foodCollection.find(query).toArray()
+            res.send(result)
+        })
+        app.get('/purchaseFoods/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email);
+            const query = { buyerEmail: email };
+            const result = await purchaseFoodCollection.find(query).toArray()
+            console.log(result);
+            res.send(result)
+        })
 
         app.get('/singleFood/:id', async (req, res) => {
             const id = req.params.id;
@@ -54,6 +68,20 @@ async function run() {
         app.get('/foodReviews', async (req, res) => {
             const result = await foodReviewsCollection.find().toArray()
             res.send(result)
+        })
+        app.put('/updatedFood/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const updatedFood = req.body;
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const foodUpdate = {
+                $set: {
+                    ...updatedFood
+                }
+            };
+            const result = await foodCollection.updateOne(query, foodUpdate, options);
+            res.send(result);
         })
         app.post('/foodReviews', async (req, res) => {
             const review = req.body;
@@ -72,6 +100,12 @@ async function run() {
             const food = req.body;
             console.log(food);
             const result = await purchaseFoodCollection.insertOne(food)
+            res.send(result)
+        })
+        app.delete('/deleteOrder/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await purchaseFoodCollection.deleteOne(query)
             res.send(result)
         })
         // Send a ping to confirm a successful connection
