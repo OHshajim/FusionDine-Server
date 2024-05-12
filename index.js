@@ -171,13 +171,12 @@ async function run() {
 
 
         //clearing Token
-        // app.post("/logout", async (req, res) => {
-        //     const user = req.body;
-        //     console.log("logging out", user);
-        //     res
-        //         .clearCookie("token", { ...cookieOptions, maxAge: 0 })
-        //         .send({ success: true });
-        // });
+        app.post("/logout", async (req, res) => {
+            const user = req.body;
+            console.log("logging out", user);
+            res.clearCookie("token", { maxAge: 0 })
+            .send({ success: true });
+        });
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
