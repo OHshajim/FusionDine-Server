@@ -58,7 +58,7 @@ async function run() {
             res.send(result)
         })
         app.get('/foods', async (req, res) => {
-            const result = await foodCollection.find().sort({ purchase_number: -1 }).limit(6).toArray()
+            const result = await foodCollection.find({}).sort({ purchase_number: -1 }).limit(6).toArray()
             res.send(result)
         })
         app.get('/food/:name', async (req, res) => {
@@ -111,12 +111,25 @@ async function run() {
             res.send(result)
         })
 
+        // purchase and quantity
         app.post('/purchaseFood', async (req, res) => {
             const food = req.body;
             const result = await purchaseFoodCollection.insertOne(food)
             res.send(result)
         })
-
+        app.put('/updateQuantity/:id', async (req, res) => {
+            const food = req.body;
+            const id = req.params.id
+            // console.log(food, id);
+            const { availableQuantity, total } = food;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const update = {
+                $set: { quantity: availableQuantity, purchase_number: total }
+            }
+            const result = await foodCollection.findOneAndUpdate(filter, update, options)
+            res.send(result)
+        })
         // Delete
         app.delete('/deleteOrder/:id', async (req, res) => {
             const id = req.params.id;
