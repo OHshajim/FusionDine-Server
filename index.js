@@ -58,8 +58,7 @@ async function run() {
             res.send(result)
         })
         app.get('/foods', async (req, res) => {
-            const query = { 'add_by.name': 'Owner' };
-            const result = await foodCollection.find(query).toArray()
+            const result = await foodCollection.find().sort({ purchase_number: -1 }).limit(6).toArray()
             res.send(result)
         })
         app.get('/food/:name', async (req, res) => {
@@ -175,7 +174,7 @@ async function run() {
             const user = req.body;
             // console.log("logging out", user);
             res.clearCookie("token", { maxAge: 0 })
-            .send({ success: true });
+                .send({ success: true });
         });
 
         // Send a ping to confirm a successful connection
