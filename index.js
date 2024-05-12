@@ -135,7 +135,7 @@ async function run() {
         // set jwt 
         app.post('/jwt', async (req, res) => {
             const user = req.body;
-            console.log(user);
+            // console.log(user);
             const token = jwt.sign(user, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
 
             res.cookie('token', token, {
@@ -148,7 +148,7 @@ async function run() {
         // jwt 
         app.get('/purchaseFoods/:email', verifyToken, async (req, res) => {
             const email = req.params.email;
-            console.log(req.user);
+            // console.log(req.user);
             if (req.user.email !== email) {
                 return res.status(403).send({ message: "forbidden access" })
             }
@@ -173,7 +173,7 @@ async function run() {
         //clearing Token
         app.post("/logout", async (req, res) => {
             const user = req.body;
-            console.log("logging out", user);
+            // console.log("logging out", user);
             res.clearCookie("token", { maxAge: 0 })
             .send({ success: true });
         });
