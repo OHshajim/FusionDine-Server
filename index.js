@@ -52,6 +52,7 @@ async function run() {
         const foodCollection = client.db('FusionDineDB').collection('foods');
         const purchaseFoodCollection = client.db('FusionDineDB').collection('purchaseFoods');
         const foodReviewsCollection = client.db('FusionDineDB').collection('reviews');
+        const UsersCollection = client.db('FusionDineDB').collection('users');
 
         app.get('/allFoods', async (req, res) => {
             const result = await foodCollection.find().toArray()
@@ -108,6 +109,12 @@ async function run() {
         app.post('/food', async (req, res) => {
             const food = req.body;
             const result = await foodCollection.insertOne(food)
+            res.send(result)
+        })
+        // save user data 
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await UsersCollection.insertOne(user)
             res.send(result)
         })
 
