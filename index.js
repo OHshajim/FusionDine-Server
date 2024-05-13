@@ -48,7 +48,7 @@ const verifyToken = (req, res, next) => {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        
+
         const foodCollection = client.db('FusionDineDB').collection('foods');
         const purchaseFoodCollection = client.db('FusionDineDB').collection('purchaseFoods');
         const foodReviewsCollection = client.db('FusionDineDB').collection('reviews');
@@ -66,6 +66,14 @@ async function run() {
             const name = req.params.name;
             const query = { food_name: name };
             const result = await foodCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        // for user
+        app.get('/user/:email', (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = foodCollection.findOne(query)
             res.send(result)
         })
 
@@ -111,6 +119,7 @@ async function run() {
             const result = await foodCollection.insertOne(food)
             res.send(result)
         })
+
         // save user data 
         app.post('/user', async (req, res) => {
             const user = req.body;
@@ -162,7 +171,7 @@ async function run() {
             })
                 .send({ success: true })
         })
-        
+
         // jwt 
         app.get('/purchaseFoods/:email', verifyToken, async (req, res) => {
             const email = req.params.email;
