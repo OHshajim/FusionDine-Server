@@ -12,8 +12,8 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "http://localhost:5172",
-        // "https://cardoctor-bd.web.app",
-        // "https://cardoctor-bd.firebaseapp.com",
+        "https://a11-b9.web.app",
+        "https://a11-b9.firebaseapp.com",
     ], credentials: true,
 }));
 app.use(express.json())
@@ -48,7 +48,7 @@ const verifyToken = (req, res, next) => {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        
         const foodCollection = client.db('FusionDineDB').collection('foods');
         const purchaseFoodCollection = client.db('FusionDineDB').collection('purchaseFoods');
         const foodReviewsCollection = client.db('FusionDineDB').collection('reviews');
@@ -120,7 +120,6 @@ async function run() {
         app.put('/updateQuantity/:id', async (req, res) => {
             const food = req.body;
             const id = req.params.id
-            // console.log(food, id);
             const { availableQuantity, total } = food;
             const filter = { _id: new ObjectId(id) };
             const options = { upsert: true };
@@ -147,16 +146,16 @@ async function run() {
         // set jwt 
         app.post('/jwt', async (req, res) => {
             const user = req.body;
-            // console.log(user);
             const token = jwt.sign(user, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
 
             res.cookie('token', token, {
                 httpOnly: true,
                 secure: true,
-                // sameSite: "none"
+                sameSite: "none"
             })
                 .send({ success: true })
         })
+        
         // jwt 
         app.get('/purchaseFoods/:email', verifyToken, async (req, res) => {
             const email = req.params.email;
@@ -185,13 +184,11 @@ async function run() {
         //clearing Token
         app.post("/logout", async (req, res) => {
             const user = req.body;
-            // console.log("logging out", user);
             res.clearCookie("token", { maxAge: 0 })
                 .send({ success: true });
         });
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
@@ -205,7 +202,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('FusionDine is running')
 })
 
 app.listen(port, () => {
