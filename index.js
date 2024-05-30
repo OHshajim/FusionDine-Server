@@ -69,15 +69,6 @@ async function run() {
             res.send(result)
         })
 
-        // for user
-        app.get('/user/:email', (req, res) => {
-            const email = req.params.email;
-            const query = { email: email };
-            const result = foodCollection.findOne(query)
-            res.send(result)
-        })
-
-
         app.get('/singleFood/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -120,10 +111,28 @@ async function run() {
             res.send(result)
         })
 
-        // save user data 
-        app.post('/user', async (req, res) => {
+        // user data 
+        app.patch('/users', async (req, res) => {
+            const updatedUser = req.body;
+            const query = { email: updatedUser.email }
+            const updateDoc = {
+                $set: {
+                    name: updatedUser.name,
+                    photo: updatedUser.photo
+                }
+            }
+            const result = await UsersCollection.updateOne(query, updateDoc)
+            res.send(result)
+        })
+
+        app.post('/users', async (req, res) => {
             const user = req.body;
-            const result = await UsersCollection.insertOne(user)
+            const query = { email: user.email }
+            const isExist = await UsersCollection.findOne(query);
+            if (isExist) {
+                return res.send({ message: 'user already exist', insertedId: null })
+            }
+            const result = await UsersCollection.insertOne(user);
             res.send(result)
         })
 
