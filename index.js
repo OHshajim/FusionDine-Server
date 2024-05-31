@@ -62,9 +62,9 @@ async function run() {
             const result = await foodCollection.find({}).sort({ purchase_number: -1 }).limit(6).toArray()
             res.send(result)
         })
-        app.get('/food/:name', async (req, res) => {
-            const name = req.params.name;
-            const query = { food_name: name };
+        app.get('/food', async (req, res) => {
+            const name = req.query;
+            const query = { food_name: { $regex: name.search, $options:'i' } }
             const result = await foodCollection.find(query).toArray()
             res.send(result)
         })
