@@ -1,16 +1,16 @@
-# FusionDine Server Side
+FusionDine Server Side
 
-****** Tecnologies ****** <br/>
+****** Tecnologies ******
 NodeJS || ExpressJS || MongoDB || JWT 
 
 
 ***To use code or clone or run this server that :
-1. applied and connect with mongoDB <br/>
-       a. DB_USER= {name} <br/>
-       b. DB_PASS= {pass}<br/>
-       c. ACCESS_KEY= {token}<br/>
+1. applied and connect with mongoDB 
+       a. DB_USER= {name} 
+       b. DB_PASS= {pass}
+       c. ACCESS_KEY= {token}
 2. install npm packages ---->{express, cors , dotenv, mongodb, jwt }
 
 
-# Client Site 
+Client Site 
 Client Side Repository Link: https://github.com/OHshajim/LifeCare-Client
